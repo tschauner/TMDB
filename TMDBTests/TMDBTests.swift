@@ -7,39 +7,81 @@
 //
 
 import XCTest
-
+@testable import TMDB
 
 class TMDBTests: XCTestCase {
     
-
     let baseURL = "https://api.themoviedb.org/3"
     let apiKey = "a277803c21540f1dd682f045bf9d6d90"
     
-    func testUpcomingMovies() {
-        let expectation = XCTestExpectation(description: "Download upcoming movies")
-        let url = URL(string: String(format: "%@/movie/now_playing?api_key=%@&%@", baseURL, apiKey, "page=1"))!
-        
-        let dataTask = URLSession.shared.dataTask(with: url) { (data, _, _) in
-            XCTAssertNotNil(data, "No data was downloaded.")
-            expectation.fulfill()
+    func testApicServiceNowPlayingMovies() {
+        let expectation = XCTestExpectation(description: "Download now playing movies")
+        APIService.shared.request(endpoint: .nowPlaying(page: 1)) { (response: Result<MovieResult, APIError>) in
+            switch response {
+            case .success(let movieResult):
+                assert(!movieResult.results.isEmpty)
+                expectation.fulfill()
+            case .failure(let error):
+                
+                switch error {
+                case .httpError(let error):
+                    XCTAssertNil(error)
+                case .dataError(let error):
+                     XCTAssertNil(error)
+                }
+            }
         }
-
-        dataTask.resume()
-        wait(for: [expectation], timeout: 10.0)
+        wait(for: [expectation], timeout: 5.0)
     }
     
-    func testGenres() {
+    func testApiServiceGenres() {
         let expectation = XCTestExpectation(description: "Download genres")
-        let url = URL(string: String(format: "%@/genre/movie/list?api_key=%@", baseURL, apiKey))!
-        
-        let dataTask = URLSession.shared.dataTask(with: url) { (data, _, _) in
-            XCTAssertNotNil(data, "No data was downloaded.")
-            expectation.fulfill()
+        APIService.shared.request(endpoint: .genres) { (response: Result<GenreResult, APIError>) in
+            switch response {
+            case .success(let genreResult):
+                assert(!genreResult.genres.isEmpty)
+                expectation.fulfill()
+            case .failure(let error):
+                
+                switch error {
+                case .httpError(let error):
+                    XCTAssertNil(error)
+                case .dataError(let error):
+                     XCTAssertNil(error)
+                }
+            }
         }
-
-        dataTask.resume()
-        wait(for: [expectation], timeout: 10.0)
-        
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func testApiServiceSearch() {
+        let expectation = XCTestExpectation(description: "Download genres")
+        APIService.shared.request(endpoint: .search("Joker")) { (response: Result<MovieResult, APIError>) in
+            switch response {
+            case .success(let movieResult):
+                assert(movieResult.results.count > 3)
+                expectation.fulfill()
+            case .failure(let error):
+                
+                switch error {
+                case .httpError(let error):
+                    XCTAssertNil(error)
+                case .dataError(let error):
+                     XCTAssertNil(error)
+                }
+            }
+        }
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func testActionGenre() {
+        guard let genre = Genre(withId: 28) else { return }
+        assert(genre.name == "Action")
+    }
+    
+    func testInitGenre() {
+        let genre = Genre(withId: 0)
+        XCTAssertNil(genre)
     }
 
 }

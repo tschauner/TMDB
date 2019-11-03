@@ -44,23 +44,23 @@ class MovieDataBase {
         fetchMovies(forPage: currentPage)
     }
     
-    
     /// fetch upcoming moviews
     /// - Parameter page: default is 1. if the user  takes refresh control default page will be used
     /// - Parameter completion: optional completion block. will be used when user takes refresh control
     func fetchMovies(forPage page: Int = 1, completion: (() -> Void)? = nil) {
         APIService.shared.request(endpoint: .nowPlaying(page: page)) { (response: Result<MovieResult, APIError>) in
             switch response {
-            case .success(let movies):
+            case .success(let movieResult):
                 page == 1
-                    ? self.movies = movies.results
-                    : self.movies.append(contentsOf: movies.results)
+                    ? self.movies = movieResult.results
+                    : self.movies.append(contentsOf: movieResult.results)
                 
                 NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
                 completion?()
             case .failure:
                 completion?()
                 DispatchQueue.main.async {
+                     // appdelegate must be called on mainthread
                      UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
                 }
             }
@@ -70,8 +70,8 @@ class MovieDataBase {
     func searchMovies(searchSting: String) {
         APIService.shared.request(endpoint: .search(searchSting)) { (response: Result<MovieResult, APIError>) in
             switch response {
-            case .success(let movies):
-                self.filteredMovies = movies.results
+            case .success(let movieResult):
+                self.filteredMovies = movieResult.results
                 NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
             case .failure:
                 DispatchQueue.main.async {
@@ -85,8 +85,8 @@ class MovieDataBase {
         APIService.shared.request(endpoint: .genres) { (response: Result<
             GenreResult, APIError>) in
             switch response {
-            case .success(let genres):
-                self.genres = genres.genres
+            case .success(let genresResult):
+                self.genres = genresResult.genres
             case .failure:
                 DispatchQueue.main.async {
                      UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
