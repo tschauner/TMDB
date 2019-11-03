@@ -26,7 +26,7 @@ class MovieDetailViewController: UIViewController {
     init(withMovie movie: Movie) {
         self.movie = movie
         self.headerview.movie = movie
-        super.init(nibName: nil, bundle: nil)
+        super.init(nibName: "MovieDetailViewController", bundle: nil)
     }
     
     required init?(coder: NSCoder) {

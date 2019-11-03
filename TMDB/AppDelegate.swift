@@ -32,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance(whenContainedInInstancesOf: [UINavigationController.self]).isTranslucent = true
         UINavigationBar.appearance(whenContainedInInstancesOf: [UINavigationController.self]).shadowImage = UIImage()
         UINavigationBar.appearance(whenContainedInInstancesOf: [UINavigationController.self]).tintColor = .white
-        UINavigationBar.appearance(whenContainedInInstancesOf: [UINavigationController.self]).backgroundColor = .clear
         UINavigationBar.appearance(whenContainedInInstancesOf: [UINavigationController.self]).setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance(whenContainedInInstancesOf: [UINavigationController.self]).barStyle = .black
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
