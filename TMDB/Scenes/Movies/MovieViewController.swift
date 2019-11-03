@@ -13,11 +13,13 @@ class MovieViewController: UIViewController {
     private let tableView: UITableView = UITableView(frame: .zero, style: .grouped)
     private let searchBar = UISearchBar()
     private let movieDataBase = MovieDataBase.shared
+    private let statusBarView = UIView()
     
     private var isSearching: Bool = false {
         didSet {
             movieDataBase.isSearching = isSearching
             tableView.contentInsetAdjustmentBehavior = isSearching ? .always : .never
+            statusBarView.alpha = isSearching ? 1 : 0
         }
     }
 
@@ -55,7 +57,14 @@ class MovieViewController: UIViewController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.keyboardDismissMode = .onDrag
         
+        let rect = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: 20))
+        statusBarView.frame = rect
+        statusBarView.backgroundColor = UIColor.black
+        statusBarView.alpha = 0
+        view.addSubview(statusBarView)
+        
         searchBar.searchBarStyle = .minimal
+        searchBar.backgroundColor = .black
         searchBar.placeholder = "Search for movies"
         searchBar.delegate = self
         searchBar.showsCancelButton = true
