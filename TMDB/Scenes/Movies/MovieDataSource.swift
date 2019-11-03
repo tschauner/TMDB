@@ -52,7 +52,6 @@ class MovieDataSource: NSObject {
         }
         
         containerView.addSubview(tryAgainButton)
-        
         tryAgainButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         tryAgainButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: 100).isActive = true
         tryAgainButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
