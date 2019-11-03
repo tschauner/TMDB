@@ -15,7 +15,9 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var headerContainerView: UIView!
     
     private let headerview: HeaderView = {
-        let headerView: HeaderView = HeaderView.fromNib()
+        guard let headerView: HeaderView = HeaderView.fromNib() else {
+            fatalError("failed to load HeaderView")
+        }
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.isDetailController = true
         return headerView

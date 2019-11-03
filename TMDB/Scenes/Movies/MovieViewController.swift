@@ -140,10 +140,11 @@ extension MovieViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let movie = movieDataBase.featuredMovie else {
-            return nil
+        guard let movie = movieDataBase.featuredMovie,
+              let headerView: HeaderView = HeaderView.fromNib() else {
+              return nil
         }
-        let headerView: HeaderView = HeaderView.fromNib()
+
         headerView.movie = movie
         headerView.onPress = { [weak self] in
             self?.showDetailController(forMovie: movie)

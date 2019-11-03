@@ -13,7 +13,9 @@ class MovieDataSource: NSObject {
     private let movieDataBase = MovieDataBase.shared
     
     private let loadingBackgroundView: LoadingBackgroundView = {
-        let backgroundView: LoadingBackgroundView = LoadingBackgroundView.fromNib()
+        guard let backgroundView: LoadingBackgroundView = LoadingBackgroundView.fromNib() else {
+            fatalError("failed to load LoadingBackgroundView")
+        }
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.errorText = "Movies couldn't be parsed"
         return backgroundView
