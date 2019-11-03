@@ -60,7 +60,9 @@ class MovieDataBase {
                 completion?()
             case .failure:
                 completion?()
-                UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                DispatchQueue.main.async {
+                     UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                }
             }
         }
     }
@@ -72,7 +74,9 @@ class MovieDataBase {
                 self.filteredMovies = movies.results
                 NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
             case .failure:
-                UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                DispatchQueue.main.async {
+                     UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                }
             }
         }
     }
@@ -84,7 +88,9 @@ class MovieDataBase {
             case .success(let genres):
                 self.genres = genres.genres
             case .failure:
-                UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                DispatchQueue.main.async {
+                     UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                }
             }
         }
     }

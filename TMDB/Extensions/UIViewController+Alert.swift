@@ -22,6 +22,6 @@ extension UIViewController {
     
     func showDefaultAlert() {
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        UIApplication.shared.appDelegate.navigationController.showAlert(withStyle: .alert, title: nil, message: "Something went wrong. Check your internet connection", actions: okAction, completion: nil)
+        showAlert(withStyle: .alert, title: nil, message: "Something went wrong. Check your internet connection", actions: okAction, completion: nil)
     }
 }

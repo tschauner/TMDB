@@ -74,6 +74,8 @@ class MovieViewController: UIViewController {
         tableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(fetchMovies), for: .valueChanged)
         
+        MovieDataBase.shared.fetchGenres()
+        MovieDataBase.shared.fetchMovies()
         setupNavigationBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(moviesDidChange), name: Notifications.moviesDidChange.name, object: nil)
