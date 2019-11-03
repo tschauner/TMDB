@@ -13,6 +13,7 @@ class MovieDataSource: NSObject {
     private var activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     private let movieDataBase = MovieDataBase.shared
     private let retryTimeInterval: TimeInterval = 5
+    private let errorLabel = UILabel()
     
     private var movies: [Movie] {
         return movieDataBase.movies
@@ -39,6 +40,17 @@ class MovieDataSource: NSObject {
         activityIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         activityIndicator.startAnimating()
         
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        errorLabel.text = "Movies couldn't be parsed"
+        errorLabel.isHidden = true
+        
+        containerView.addSubview(errorLabel)
+        errorLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        errorLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: -50).isActive = true
+        errorLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        errorLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
         let tryAgainButton = UIButton()
         tryAgainButton.translatesAutoresizingMaskIntoConstraints = false
         tryAgainButton.setTitle("Try again", for: .normal)
@@ -49,8 +61,11 @@ class MovieDataSource: NSObject {
         tryAgainButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         tryAgainButton.addTarget(self, action: #selector(tryFetchMovies), for: .touchUpInside)
         
+        // acitivy indicator will be shown as long as there are no movies available
+        // after the timer ends, a retry button with the option to try fetch the movies again shows up
         Timer.scheduledTimer(withTimeInterval: retryTimeInterval, repeats: false) { timer in
             tryAgainButton.isHidden = false
+            self.errorLabel.isHidden = false
             self.activityIndicator.stopAnimating()
         }
         
@@ -66,7 +81,9 @@ class MovieDataSource: NSObject {
     @objc private func tryFetchMovies() {
         activityIndicator.startAnimating()
         movieDataBase.fetchMovies()
+        errorLabel.isHidden = true
         Timer.scheduledTimer(withTimeInterval: retryTimeInterval, repeats: false) { timer in
+            self.errorLabel.isHidden = false
             self.activityIndicator.stopAnimating()
         }
     }
