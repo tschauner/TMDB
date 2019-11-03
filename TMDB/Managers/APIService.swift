@@ -74,6 +74,7 @@ class APIService {
             }
             
             if let error = error {
+                debugPrint(error.localizedDescription)
                 completion(.failure(.dataError(error)))
             }
             
@@ -90,7 +91,7 @@ class APIService {
                 }
             }
             catch {
-                print(error)
+                debugPrint(error.localizedDescription)
                 completion(.failure(.dataError(error)))
             }
             
