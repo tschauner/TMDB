@@ -10,7 +10,8 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
+    let navigationController = UINavigationController(rootViewController: MovieViewController())
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -22,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MovieDataBase.shared.fetchGenres()
         applyAppeareance()
         
-        window.rootViewController = UINavigationController(rootViewController: MovieViewController())
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
         return true
@@ -37,5 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
 
+}
+
+extension UIApplication {
+    
+    var appDelegate: AppDelegate {
+        return delegate as! AppDelegate
+    }
 }
 
