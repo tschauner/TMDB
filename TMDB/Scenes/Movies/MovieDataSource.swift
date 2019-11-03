@@ -70,7 +70,6 @@ class MovieDataSource: NSObject {
             self.activityIndicator.stopAnimating()
         }
     }
-    
 }
 
 extension MovieDataSource: UITableViewDataSource {
@@ -101,5 +100,4 @@ extension MovieDataSource: UITableViewDataSource {
         
         return cell
     }
-    
 }
