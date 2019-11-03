@@ -21,9 +21,9 @@ class MovieDataBase {
     
     var movies: [Movie] = [] {
         didSet {
-            if let firstMovie = movies.first {
+            if currentPage == 1, let firstMovie = movies.first {
                 featuredMovie = firstMovie
-                movies.remove(at: 0)
+                movies.removeAll(where: { $0.id == firstMovie.id })
             }
         }
     }
@@ -31,7 +31,13 @@ class MovieDataBase {
     var filteredMovies: [Movie] = []
     var genres: [Genre] = []
     
-    var isSearching: Bool = false
+    var isSearching: Bool = false {
+        didSet {
+            if !isSearching {
+                filteredMovies.removeAll()
+            }
+        }
+    }
     
     func nextPage() {
         currentPage += 1

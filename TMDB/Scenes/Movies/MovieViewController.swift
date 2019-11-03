@@ -109,6 +109,7 @@ extension MovieViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+        searchBar.text = nil
         isSearching = false
         navigationItem.titleView = nil
         tableView.reloadData()
