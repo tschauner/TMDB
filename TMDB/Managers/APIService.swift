@@ -22,30 +22,41 @@ enum APIEndpoint: APIProtocol {
         return "a277803c21540f1dd682f045bf9d6d90"
     }
     
+    var baseURL: String {
+        return "https://api.themoviedb.org/3"
+    }
+    
     var parameter: String {
         switch self {
         case .search(let searchString):
-            return String(format: "query=%@", searchString)
+            return String(format: "&query=%@", searchString)
         case .nowPlaying(page: let page):
-            return String(format: "page=%d", page)
+            return String(format: "&page=%d", page)
         default:
             return "&language=en-US"
+        }
+    }
+    
+    var path: String {
+        switch self {
+        case .nowPlaying:
+            return "/movie/now_playing"
+        case .search:
+            return "/search/movie"
+        case .genres:
+            return "/genre/movie/list"
         }
     }
     
     var url: URL? {
         switch self {
         case .nowPlaying:
-            return URL(string: String(format: "%@/movie/now_playing?api_key=%@&%@", baseURL, apiKey, parameter))
+            return URL(string: String(format: "%@%@?api_key=%@%@", baseURL, path, apiKey, parameter))
         case.search:
-            return URL(string: String(format: "%@/search/movie?api_key=%@&%@", baseURL, apiKey, parameter))
+            return URL(string: String(format: "%@%@?api_key=%@%@", baseURL, path, apiKey, parameter))
         case .genres:
-            return URL(string: String(format: "%@/genre/movie/list?api_key=%@", baseURL, apiKey))
+            return URL(string: String(format: "%@%@?api_key=%@", baseURL, path, apiKey))
         }
-    }
-    
-    var baseURL: String {
-        return "https://api.themoviedb.org/3"
     }
     
     case nowPlaying(page: Int)
