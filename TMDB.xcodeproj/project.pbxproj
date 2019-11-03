@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		17C52CE4236F50B300151D27 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C52CE3236F50B300151D27 /* UIViewController+Alert.swift */; };
+		17C52CE6236F767B00151D27 /* LoadingBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C52CE5236F767B00151D27 /* LoadingBackgroundView.swift */; };
+		17C52CE8236F769600151D27 /* LoadingBackgroundView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17C52CE7236F769600151D27 /* LoadingBackgroundView.xib */; };
 		17DB75E3236F089E00E28351 /* TMDBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB75E2236F089E00E28351 /* TMDBUITests.swift */; };
 		17DB7608236F08DF00E28351 /* UIView+Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB75F1236F08DF00E28351 /* UIView+Nib.swift */; };
 		17DB7609236F08DF00E28351 /* Notification+Name.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DB75F2236F08DF00E28351 /* Notification+Name.swift */; };
@@ -50,6 +52,8 @@
 
 /* Begin PBXFileReference section */
 		17C52CE3236F50B300151D27 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
+		17C52CE5236F767B00151D27 /* LoadingBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingBackgroundView.swift; sourceTree = "<group>"; };
+		17C52CE7236F769600151D27 /* LoadingBackgroundView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingBackgroundView.xib; sourceTree = "<group>"; };
 		17DB75BD236F089D00E28351 /* TMDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17DB75CE236F089E00E28351 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17DB75D7236F089E00E28351 /* TMDBTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TMDBTests.swift; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 			children = (
 				17DB75F7236F08DF00E28351 /* HeaderView.xib */,
 				17DB75F8236F08DF00E28351 /* HeaderView.swift */,
+				17C52CE5236F767B00151D27 /* LoadingBackgroundView.swift */,
+				17C52CE7236F769600151D27 /* LoadingBackgroundView.xib */,
 				17DB7600236F08DF00E28351 /* VerticalGradientView.swift */,
 			);
 			path = Views;
@@ -358,6 +364,7 @@
 			files = (
 				17DB7611236F08DF00E28351 /* MovieDetailViewController.xib in Resources */,
 				17DB760A236F08DF00E28351 /* MovieTableViewCell.xib in Resources */,
+				17C52CE8236F769600151D27 /* LoadingBackgroundView.xib in Resources */,
 				17DB760B236F08DF00E28351 /* HeaderView.xib in Resources */,
 				17DB761D236F094800E28351 /* LaunchScreen.storyboard in Resources */,
 				17DB761B236F090300E28351 /* Assets.xcassets in Resources */,
@@ -385,6 +392,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17C52CE6236F767B00151D27 /* LoadingBackgroundView.swift in Sources */,
 				17DB7612236F08DF00E28351 /* VerticalGradientView.swift in Sources */,
 				17DB7608236F08DF00E28351 /* UIView+Nib.swift in Sources */,
 				17DB760F236F08DF00E28351 /* MovieDataSource.swift in Sources */,

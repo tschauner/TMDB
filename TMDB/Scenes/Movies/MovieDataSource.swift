@@ -10,10 +10,14 @@ import UIKit
 
 class MovieDataSource: NSObject {
     
-    private var activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     private let movieDataBase = MovieDataBase.shared
-    private let retryTimeInterval: TimeInterval = 5
-    private let errorLabel = UILabel()
+    
+    private let loadingBackgroundView: LoadingBackgroundView = {
+        let backgroundView: LoadingBackgroundView = LoadingBackgroundView.fromNib()
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.errorText = "Movies couldn't be parsed"
+        return backgroundView
+    }()
     
     private var movies: [Movie] {
         return movieDataBase.movies
@@ -34,58 +38,18 @@ class MovieDataSource: NSObject {
     private func backgroundView(for tableView: UITableView) -> UIView? {
         let containerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
         
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(activityIndicator)
-        activityIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
-        activityIndicator.startAnimating()
-        
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
-        errorLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        errorLabel.text = "Movies couldn't be parsed"
-        errorLabel.isHidden = true
-        
-        containerView.addSubview(errorLabel)
-        errorLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        errorLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: -50).isActive = true
-        errorLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        errorLabel.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        let tryAgainButton = UIButton()
-        tryAgainButton.translatesAutoresizingMaskIntoConstraints = false
-        tryAgainButton.setTitle("Try again", for: .normal)
-        tryAgainButton.setTitleColor(.black, for: .normal)
-        tryAgainButton.backgroundColor = .white
-        tryAgainButton.layer.cornerRadius = 15
-        tryAgainButton.isHidden = true
-        tryAgainButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-        tryAgainButton.addTarget(self, action: #selector(tryFetchMovies), for: .touchUpInside)
-        
-        // acitivy indicator will be shown as long as there are no movies available
-        // after the timer ends, a retry button with the option to try fetch the movies again shows up
-        Timer.scheduledTimer(withTimeInterval: retryTimeInterval, repeats: false) { timer in
-            tryAgainButton.isHidden = false
-            self.errorLabel.isHidden = false
-            self.activityIndicator.stopAnimating()
-        }
-        
-        containerView.addSubview(tryAgainButton)
-        tryAgainButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        tryAgainButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: 100).isActive = true
-        tryAgainButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        tryAgainButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        containerView.addSubview(loadingBackgroundView)
+        loadingBackgroundView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        loadingBackgroundView.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        loadingBackgroundView.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
+        loadingBackgroundView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
         
         return containerView
     }
     
     @objc private func tryFetchMovies() {
-        activityIndicator.startAnimating()
         movieDataBase.fetchMovies()
-        errorLabel.isHidden = true
-        Timer.scheduledTimer(withTimeInterval: retryTimeInterval, repeats: false) { timer in
-            self.errorLabel.isHidden = false
-            self.activityIndicator.stopAnimating()
-        }
+        loadingBackgroundView.retry()
     }
 }
 
@@ -93,6 +57,7 @@ extension MovieDataSource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearching {
+            tableView.backgroundView = nil
             return filteredMovies.count
         } else {
             if movies.isEmpty {

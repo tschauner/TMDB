@@ -19,9 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         guard let window = window else { return false }
         
-        MovieDataBase.shared.fetchMovies()
-        MovieDataBase.shared.fetchGenres()
         applyAppeareance()
+        MovieDataBase.shared.fetchGenres()
+        MovieDataBase.shared.fetchMovies()
         
         window.rootViewController = navigationController
         window.makeKeyAndVisible()

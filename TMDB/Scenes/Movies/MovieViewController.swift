@@ -19,11 +19,12 @@ class MovieViewController: UIViewController {
     private var isSearching: Bool = false {
         didSet {
             movieDataBase.isSearching = isSearching
+            tableView.refreshControl = isSearching ? nil : refreshControl
             tableView.contentInsetAdjustmentBehavior = isSearching ? .always : .never
-            statusBarView.alpha = isSearching ? 1 : 0
+            statusBarView.isHidden = isSearching ? false : true
         }
     }
-
+    
     private var movieDataSource: MovieDataSource? {
         didSet {
             if isViewLoaded {
@@ -45,7 +46,7 @@ class MovieViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .black
         view.addSubview(tableView)
         tableView.frame = view.bounds
@@ -58,10 +59,10 @@ class MovieViewController: UIViewController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.keyboardDismissMode = .onDrag
         
-        let rect = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: 20))
-        statusBarView.frame = rect
+        let statusbarRect = CGRect(origin: .zero, size: CGSize(width: view.frame.width, height: 20))
+        statusBarView.frame = statusbarRect
         statusBarView.backgroundColor = UIColor.black
-        statusBarView.alpha = 0
+        statusBarView.isHidden = true
         view.addSubview(statusBarView)
         
         searchBar.searchBarStyle = .minimal
@@ -70,14 +71,14 @@ class MovieViewController: UIViewController {
         searchBar.delegate = self
         searchBar.showsCancelButton = true
         
-        tableView.addSubview(refreshControl)
+        tableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(fetchMovies), for: .valueChanged)
         
         setupNavigationBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(moviesDidChange), name: Notifications.moviesDidChange.name, object: nil)
     }
-        
+    
     private func setupNavigationBar() {
         let searchButton = UIBarButtonItem(image: #imageLiteral(resourceName: "magnifier"), landscapeImagePhone: nil, style: .done, target: self, action: #selector(searchButtonTapped))
         navigationItem.rightBarButtonItem = searchButton
@@ -126,7 +127,6 @@ extension MovieViewController: UISearchBarDelegate {
         navigationItem.titleView = nil
         tableView.reloadData()
     }
-    
 }
 
 extension MovieViewController: UITableViewDelegate {
