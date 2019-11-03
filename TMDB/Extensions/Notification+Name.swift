@@ -1,6 +1,6 @@
 //
 //  Notification+Name.swift
-//  MovieDatabase
+//  TMDB
 //
 //  Created by Philipp Tschauner on 02.11.19.
 //  Copyright © 2019 phitsch. All rights reserved.
