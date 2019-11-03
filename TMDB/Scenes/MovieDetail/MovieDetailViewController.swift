@@ -42,6 +42,8 @@ class MovieDetailViewController: UIViewController {
         descriptionTextView.text = movie.overview
         descriptionTextView.textColor = .white
         descriptionTextView.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        descriptionTextView.textContainerInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        descriptionTextView.showsVerticalScrollIndicator = false
         
         genreLabel.textColor = .white
         genreLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
