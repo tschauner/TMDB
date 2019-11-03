@@ -12,7 +12,6 @@ enum Notifications: String, NotificationName {
     case moviesDidChange
 }
 
-
 class MovieDataBase {
     
     static let shared = MovieDataBase()
@@ -46,7 +45,7 @@ class MovieDataBase {
                 self.movies.append(contentsOf: movies.results)
                 NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
             case .failure:
-                debugPrint("shit happens")
+               UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
             }
         }
     }
@@ -58,7 +57,7 @@ class MovieDataBase {
                 self.filteredMovies = movies.results
                 NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
             case .failure:
-                debugPrint("shit happens")
+                UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
             }
         }
     }
@@ -70,7 +69,7 @@ class MovieDataBase {
             case .success(let genres):
                 self.genres = genres.genres
             case .failure:
-                debugPrint("shit happens")
+                UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
             }
         }
     }
