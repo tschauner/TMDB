@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  Movie.swift
 //  TMDB
 //
 //  Created by Philipp Tschauner on 02.11.19.

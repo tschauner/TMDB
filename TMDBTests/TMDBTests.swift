@@ -11,9 +11,6 @@ import XCTest
 
 class TMDBTests: XCTestCase {
     
-    let baseURL = "https://api.themoviedb.org/3"
-    let apiKey = "a277803c21540f1dd682f045bf9d6d90"
-    
     func testApicServiceNowPlayingMovies() {
         let expectation = XCTestExpectation(description: "Download now playing movies")
         APIService.shared.request(endpoint: .nowPlaying(page: 1)) { (response: Result<MovieResult, APIError>) in
@@ -31,7 +28,7 @@ class TMDBTests: XCTestCase {
                 }
             }
         }
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 10.0)
     }
     
     func testApiServiceGenres() {
@@ -51,11 +48,11 @@ class TMDBTests: XCTestCase {
                 }
             }
         }
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 10.0)
     }
     
     func testApiServiceSearch() {
-        let expectation = XCTestExpectation(description: "Download genres")
+        let expectation = XCTestExpectation(description: "Search movies")
         APIService.shared.request(endpoint: .search("Joker")) { (response: Result<MovieResult, APIError>) in
             switch response {
             case .success(let movieResult):

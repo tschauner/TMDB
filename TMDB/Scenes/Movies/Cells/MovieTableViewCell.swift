@@ -1,5 +1,5 @@
 //
-//  MoveTableViewCell.swift
+//  MovieTableViewCell.swift
 //  TMDB
 //
 //  Created by Philipp Tschauner on 02.11.19.
@@ -11,7 +11,7 @@ import SDWebImage
 
 class MovieTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var moviewImageView: UIImageView!
+    @IBOutlet weak var movieImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
@@ -46,8 +46,8 @@ class MovieTableViewCell: UITableViewCell {
         subtitleLabel.text = movie.releaseDataString
         overviewLabel.text = movie.overview
         
-        moviewImageView.sd_imageTransition = .fade
-        moviewImageView.sd_setImage(with: movie.imageURL, placeholderImage: #imageLiteral(resourceName: "placeholderImage"))
+        movieImageView.sd_imageTransition = .fade
+        movieImageView.sd_setImage(with: movie.imageURL, placeholderImage: #imageLiteral(resourceName: "placeholderImage"))
     }
     
     override func prepareForReuse() {
@@ -56,7 +56,7 @@ class MovieTableViewCell: UITableViewCell {
         titleLabel.text = nil
         subtitleLabel.text = nil
         overviewLabel.text = nil
-        moviewImageView.image = nil
+        movieImageView.image = nil
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
@@ -64,5 +64,4 @@ class MovieTableViewCell: UITableViewCell {
 
         backgroundColor = highlighted ? UIColor(white: 0.1, alpha: 1) : .clear
     }
-    
 }

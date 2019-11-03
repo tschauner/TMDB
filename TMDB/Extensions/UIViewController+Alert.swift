@@ -1,5 +1,5 @@
 //
-//  ViewController+Alert.swift
+//  UIViewController+Alert.swift
 //  TMDB
 //
 //  Created by Philipp Tschauner on 03.11.19.

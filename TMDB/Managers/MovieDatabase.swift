@@ -44,7 +44,7 @@ class MovieDataBase {
         fetchMovies(forPage: currentPage)
     }
     
-    /// fetch upcoming moviews
+    /// fetch nowplaying movies
     /// - Parameter page: default is 1. if the user  takes refresh control default page will be used
     /// - Parameter completion: optional completion block. will be used when user takes refresh control
     func fetchMovies(forPage page: Int = 1, completion: (() -> Void)? = nil) {
@@ -67,6 +67,7 @@ class MovieDataBase {
         }
     }
     
+    /// fetch movies with searchString
     func searchMovies(searchSting: String) {
         APIService.shared.request(endpoint: .search(searchSting)) { (response: Result<MovieResult, APIError>) in
             switch response {
@@ -81,6 +82,7 @@ class MovieDataBase {
         }
     }
     
+    /// fetch all genres
     func fetchGenres() {
         APIService.shared.request(endpoint: .genres) { (response: Result<
             GenreResult, APIError>) in

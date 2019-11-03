@@ -119,6 +119,7 @@ class MovieViewController: UIViewController {
 extension MovieViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard !searchText.isEmpty else { return }
         search(movies: searchText)
     }
     

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +21,7 @@
                         </constraints>
                     </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="BSm-IA-Rpw">
-                        <rect key="frame" x="224" y="105.5" width="709" height="106.5"/>
+                        <rect key="frame" x="224" y="105.5" width="714" height="106.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="hmg-XJ-qNs">
                                 <rect key="frame" x="0.0" y="0.0" width="42" height="44"/>
@@ -71,7 +69,7 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="moreButton" destination="ZmW-Si-oBr" id="wan-Da-AA2"/>
-                <outlet property="moviewImageView" destination="Px9-CZ-giM" id="hyJ-sI-sAm"/>
+                <outlet property="movieImageView" destination="Px9-CZ-giM" id="hyJ-sI-sAm"/>
                 <outlet property="overviewLabel" destination="BoZ-CC-pjh" id="kOm-xp-OB2"/>
                 <outlet property="subtitleLabel" destination="zwy-0r-Wqj" id="lYH-o5-V3e"/>
                 <outlet property="titleLabel" destination="qQ7-TE-otB" id="ei6-eq-HKy"/>
