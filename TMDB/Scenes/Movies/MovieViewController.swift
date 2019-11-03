@@ -14,6 +14,7 @@ class MovieViewController: UIViewController {
     private let searchBar = UISearchBar()
     private let movieDataBase = MovieDataBase.shared
     private let statusBarView = UIView()
+    private let refreshControl = UIRefreshControl()
     
     private var isSearching: Bool = false {
         didSet {
@@ -69,6 +70,9 @@ class MovieViewController: UIViewController {
         searchBar.delegate = self
         searchBar.showsCancelButton = true
         
+        tableView.addSubview(refreshControl)
+        refreshControl.addTarget(self, action: #selector(fetchMovies), for: .valueChanged)
+        
         setupNavigationBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(moviesDidChange), name: Notifications.moviesDidChange.name, object: nil)
@@ -77,6 +81,14 @@ class MovieViewController: UIViewController {
     private func setupNavigationBar() {
         let searchButton = UIBarButtonItem(image: #imageLiteral(resourceName: "magnifier"), landscapeImagePhone: nil, style: .done, target: self, action: #selector(searchButtonTapped))
         navigationItem.rightBarButtonItem = searchButton
+    }
+    
+    @objc private func fetchMovies() {
+        refreshControl.beginRefreshing()
+        movieDataBase.fetchMovies {
+            self.refreshControl.endRefreshing()
+            self.tableView.reloadData()
+        }
     }
     
     @objc private func searchButtonTapped() {

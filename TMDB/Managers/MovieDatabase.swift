@@ -44,14 +44,19 @@ class MovieDataBase {
         fetchMovies(forPage: currentPage)
     }
     
-    func fetchMovies(forPage page: Int = 1) {
+    func fetchMovies(forPage page: Int = 1, completion: (() -> Void)? = nil) {
         APIService.shared.request(endpoint: .nowPlaying(page: page)) { (response: Result<MovieResult, APIError>) in
             switch response {
             case .success(let movies):
-                self.movies.append(contentsOf: movies.results)
+                page == 1
+                    ? self.movies = movies.results
+                    : self.movies.append(contentsOf: movies.results)
+                
                 NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
+                completion?()
             case .failure:
-               UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                completion?()
+                UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
             }
         }
     }

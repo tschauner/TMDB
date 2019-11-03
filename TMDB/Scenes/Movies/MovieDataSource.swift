@@ -12,17 +12,18 @@ class MovieDataSource: NSObject {
     
     private var activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
     private let movieDataBase = MovieDataBase.shared
+    private let retryTimeInterval: TimeInterval = 5
     
     private var movies: [Movie] {
-        return MovieDataBase.shared.movies
+        return movieDataBase.movies
     }
     
-    private var filterdMovies: [Movie] {
-        return MovieDataBase.shared.filteredMovies
+    private var filteredMovies: [Movie] {
+        return movieDataBase.filteredMovies
     }
     
     private var isSearching: Bool {
-        return MovieDataBase.shared.isSearching
+        return movieDataBase.isSearching
     }
     
     func configure(tableView: UITableView) {
@@ -36,6 +37,7 @@ class MovieDataSource: NSObject {
         containerView.addSubview(activityIndicator)
         activityIndicator.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         activityIndicator.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        activityIndicator.startAnimating()
         
         let tryAgainButton = UIButton()
         tryAgainButton.translatesAutoresizingMaskIntoConstraints = false
@@ -44,9 +46,10 @@ class MovieDataSource: NSObject {
         tryAgainButton.backgroundColor = .white
         tryAgainButton.layer.cornerRadius = 15
         tryAgainButton.isHidden = true
+        tryAgainButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         tryAgainButton.addTarget(self, action: #selector(tryFetchMovies), for: .touchUpInside)
         
-        let _ = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+        Timer.scheduledTimer(withTimeInterval: retryTimeInterval, repeats: false) { timer in
             tryAgainButton.isHidden = false
             self.activityIndicator.stopAnimating()
         }
@@ -55,16 +58,15 @@ class MovieDataSource: NSObject {
         tryAgainButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         tryAgainButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor, constant: 100).isActive = true
         tryAgainButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        tryAgainButton.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        tryAgainButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        activityIndicator.startAnimating()
         return containerView
     }
     
     @objc private func tryFetchMovies() {
         activityIndicator.startAnimating()
         movieDataBase.fetchMovies()
-        let _ = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+        Timer.scheduledTimer(withTimeInterval: retryTimeInterval, repeats: false) { timer in
             self.activityIndicator.stopAnimating()
         }
     }
@@ -75,9 +77,9 @@ extension MovieDataSource: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearching {
-            return movieDataBase.filteredMovies.count
+            return filteredMovies.count
         } else {
-            if movies.count == 0 {
+            if movies.isEmpty {
                 tableView.backgroundView = backgroundView(for: tableView)
                 return 0
             } else {
@@ -91,10 +93,10 @@ extension MovieDataSource: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else { fatalError("failed to load MovieTableViewCell")}
         
         if indexPath.row == movies.count - 5 {
-            MovieDataBase.shared.nextPage()
+            movieDataBase.nextPage()
         }
 
-        let movie = isSearching ? filterdMovies[indexPath.row] : movies[indexPath.row]
+        let movie = isSearching ? filteredMovies[indexPath.row] : movies[indexPath.row]
         cell.configure(movie: movie)
         
         return cell
