@@ -12,12 +12,13 @@ class MovieDataSource: NSObject {
     
     private let movieDataBase = MovieDataBase.shared
 
-    private let loadingBackgroundView: LoadingBackgroundView = {
+    private lazy var loadingBackgroundView: LoadingBackgroundView = {
         guard let backgroundView: LoadingBackgroundView = LoadingBackgroundView.fromNib() else {
             fatalError("failed to load LoadingBackgroundView")
         }
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         backgroundView.errorText = "Movies couldn't be parsed"
+        backgroundView.onPress = { MovieDataBase.shared.fetchMovies() }
         return backgroundView
     }()
     
@@ -48,11 +49,6 @@ class MovieDataSource: NSObject {
         
         return containerView
     }
-    
-    @objc private func tryFetchMovies() {
-        movieDataBase.fetchMovies()
-        loadingBackgroundView.retry()
-    }
 }
 
 extension MovieDataSource: UITableViewDataSource {
@@ -75,7 +71,7 @@ extension MovieDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else { fatalError("failed to load MovieTableViewCell")}
         
-        if indexPath.row > movies.count - 5 {
+        if indexPath.row >= movies.count - 5 {
             movieDataBase.nextPage()
         }
 

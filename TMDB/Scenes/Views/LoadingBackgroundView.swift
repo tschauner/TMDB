@@ -16,6 +16,8 @@ class LoadingBackgroundView: UIView {
     
     private let retryTimeInterval: TimeInterval = 5
     
+    var onPress: (() -> Void)?
+    
     var errorText: String? {
         didSet {
             errorLabel.text = errorText
@@ -47,6 +49,7 @@ class LoadingBackgroundView: UIView {
         errorLabel.isHidden = true
         retryButton.isHidden = true
         activityIndicatorView.startAnimating()
+        onPress?()
         startTimer()
     }
     

@@ -22,7 +22,10 @@ class MovieDataBase {
     
     var movies: [Movie] = [] {
         didSet {
-            setFeaturedMovie()
+            if currentPage == 1, let firstMovie = movies.first {
+                featuredMovie = firstMovie
+                movies.removeAll(where: { $0 == firstMovie })
+            }
             NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
         }
     }
@@ -41,13 +44,6 @@ class MovieDataBase {
     func nextPage() {
         currentPage += 1
         fetchMovies(forPage: currentPage)
-    }
-    
-    private func setFeaturedMovie() {
-        if currentPage == 1, let firstMovie = movies.first {
-            featuredMovie = firstMovie
-            movies.removeAll(where: { $0 == firstMovie })
-        }
     }
     
     /// fetch nowplaying movies
