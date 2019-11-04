@@ -21,21 +21,20 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nNH-ZT-GuG">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="350"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="350" id="svz-2G-g04"/>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="350" id="zsD-cz-r7M"/>
+                        <constraint firstAttribute="height" constant="300" id="svz-2G-g04"/>
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o9u-xd-chg">
-                    <rect key="frame" x="15" y="350" width="384" height="21"/>
+                    <rect key="frame" x="15" y="300" width="384" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RQJ-FH-76d">
-                    <rect key="frame" x="0.0" y="391" width="414" height="490"/>
+                    <rect key="frame" x="0.0" y="341" width="414" height="540"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>

@@ -96,7 +96,6 @@ class MovieViewController: UIViewController {
     }
     
     @objc private func fetchMovies() {
-        movieDataBase.isLoadingNextPage = false
         refreshControl.beginRefreshing()
         movieDataBase.fetchMovies {
             DispatchQueue.main.async {
@@ -113,7 +112,7 @@ class MovieViewController: UIViewController {
     }
     
     private func search(movies: String) {
-        movieDataBase.searchMovies(searchSting: movies)
+        movieDataBase.searchMovies(searchString: movies)
     }
     
     @objc private func moviesDidChange() {
@@ -148,7 +147,7 @@ extension MovieViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return MovieDataBase.shared.featuredMovie == nil || movieDataBase.isSearching  ? 0 : 270
+        return MovieDataBase.shared.featuredMovie == nil || movieDataBase.isSearching  ? 0 : 300
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

@@ -75,7 +75,7 @@ extension MovieDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else { fatalError("failed to load MovieTableViewCell")}
         
-        if indexPath.row >= movies.count - 5 && movieDataBase.isLoadingNextPage {
+        if indexPath.row > movies.count - 5 {
             movieDataBase.nextPage()
         }
 

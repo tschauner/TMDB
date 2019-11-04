@@ -22,19 +22,17 @@ class MovieDataBase {
     
     var movies: [Movie] = [] {
         didSet {
-            if let firstMovie = movies.first {
+            if currentPage == 1, let firstMovie = movies.first {
                 featuredMovie = firstMovie
                 movies.removeAll(where: { $0 == firstMovie })
-                NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
             }
+            NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
         }
     }
     
     var filteredMovies: [Movie] = []
     var genres: [Genre] = []
-    
-    var isLoadingNextPage: Bool = false
-    
+
     var isSearching: Bool = false {
         didSet {
             if !isSearching {
@@ -44,7 +42,6 @@ class MovieDataBase {
     }
     
     func nextPage() {
-        isLoadingNextPage = true
         currentPage += 1
         fetchMovies(forPage: currentPage)
     }
@@ -72,8 +69,8 @@ class MovieDataBase {
     }
     
     /// fetch movies with searchString
-    func searchMovies(searchSting: String) {
-        APIService.shared.request(endpoint: .search(searchSting)) { (response: Result<MovieResult, APIError>) in
+    func searchMovies(searchString: String) {
+        APIService.shared.request(endpoint: .search(searchString)) { (response: Result<MovieResult, APIError>) in
             switch response {
             case .success(let movieResult):
                 self.filteredMovies = movieResult.results
