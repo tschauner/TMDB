@@ -71,6 +71,8 @@ class MovieViewController: UIViewController {
         searchBar.delegate = self
         searchBar.showsCancelButton = true
         
+        refreshControl.tintColor = .lightGray
+        refreshControl.bounds = CGRect(x: refreshControl.bounds.origin.x, y: -30, width: refreshControl.bounds.size.width, height: refreshControl.bounds.size.height)
         tableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(fetchMovies), for: .valueChanged)
         
@@ -89,8 +91,10 @@ class MovieViewController: UIViewController {
     @objc private func fetchMovies() {
         refreshControl.beginRefreshing()
         movieDataBase.fetchMovies {
-            self.refreshControl.endRefreshing()
-            self.tableView.reloadData()
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+                self.tableView.reloadData()
+            }
         }
     }
     
