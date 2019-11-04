@@ -22,10 +22,7 @@ class MovieDataBase {
     
     var movies: [Movie] = [] {
         didSet {
-            if currentPage == 1, let firstMovie = movies.first {
-                featuredMovie = firstMovie
-                movies.removeAll(where: { $0 == firstMovie })
-            }
+            setFeaturedMovie()
             NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
         }
     }
@@ -46,6 +43,13 @@ class MovieDataBase {
         fetchMovies(forPage: currentPage)
     }
     
+    private func setFeaturedMovie() {
+        if currentPage == 1, let firstMovie = movies.first {
+            featuredMovie = firstMovie
+            movies.removeAll(where: { $0 == firstMovie })
+        }
+    }
+    
     /// fetch nowplaying movies
     /// - Parameter page: default is 1. if the user  takes refresh control default page will be used
     /// - Parameter completion: optional completion block. will be used when user takes refresh control
@@ -53,6 +57,7 @@ class MovieDataBase {
         APIService.shared.request(endpoint: .nowPlaying(page: page)) { (response: Result<MovieResult, APIError>) in
             switch response {
             case .success(let movieResult):
+                self.currentPage = page
                 page == 1
                     ? self.movies = movieResult.results
                     : self.movies.append(contentsOf: movieResult.results)

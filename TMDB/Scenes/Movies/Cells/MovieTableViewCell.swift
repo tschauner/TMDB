@@ -15,7 +15,7 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
-    @IBOutlet weak var moreButton: UIButton!
+    @IBOutlet weak var moreLabel: UILabel!
     
     static var identifier: String {
         return String(describing: self)
@@ -36,9 +36,9 @@ class MovieTableViewCell: UITableViewCell {
         subtitleLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         overviewLabel.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         
-        moreButton.setTitle("More Info", for: .normal)
-        moreButton.setTitleColor(.red, for: .normal)
-        moreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+        moreLabel.text = "More Info"
+        moreLabel.textColor = .red
+        moreLabel.font = UIFont.systemFont(ofSize: 14, weight: .bold)
     }
     
     func configure(movie: Movie) {

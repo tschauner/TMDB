@@ -49,14 +49,7 @@ enum APIEndpoint: APIProtocol {
     }
     
     var url: URL? {
-        switch self {
-        case .nowPlaying:
-            return URL(string: String(format: "%@%@?api_key=%@%@", baseURL, path, apiKey, parameter))
-        case.search:
-            return URL(string: String(format: "%@%@?api_key=%@%@", baseURL, path, apiKey, parameter))
-        case .genres:
-            return URL(string: String(format: "%@%@?api_key=%@", baseURL, path, apiKey))
-        }
+        return URL(string: "\(baseURL)\(path)?api_key=\(apiKey)\(parameter)")
     }
     
     case nowPlaying(page: Int)
