@@ -16,20 +16,24 @@ class MovieDataBase {
     
     static let shared = MovieDataBase()
     
-    var featuredMovie: Movie?
     private var currentPage: Int = 1
+    
+    var featuredMovie: Movie?
     
     var movies: [Movie] = [] {
         didSet {
-            if currentPage == 1, let firstMovie = movies.first {
+            if let firstMovie = movies.first {
                 featuredMovie = firstMovie
-                movies.removeAll(where: { $0.id == firstMovie.id })
+                movies.removeAll(where: { $0 == firstMovie })
+                NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
             }
         }
     }
     
     var filteredMovies: [Movie] = []
     var genres: [Genre] = []
+    
+    var isLoadingNextPage: Bool = false
     
     var isSearching: Bool = false {
         didSet {
@@ -40,6 +44,7 @@ class MovieDataBase {
     }
     
     func nextPage() {
+        isLoadingNextPage = true
         currentPage += 1
         fetchMovies(forPage: currentPage)
     }
@@ -55,7 +60,6 @@ class MovieDataBase {
                     ? self.movies = movieResult.results
                     : self.movies.append(contentsOf: movieResult.results)
                 
-                NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
                 completion?()
             case .failure:
                 completion?()

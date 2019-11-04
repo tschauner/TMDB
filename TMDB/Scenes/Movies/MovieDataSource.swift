@@ -11,7 +11,7 @@ import UIKit
 class MovieDataSource: NSObject {
     
     private let movieDataBase = MovieDataBase.shared
-    
+
     private let loadingBackgroundView: LoadingBackgroundView = {
         guard let backgroundView: LoadingBackgroundView = LoadingBackgroundView.fromNib() else {
             fatalError("failed to load LoadingBackgroundView")
@@ -75,7 +75,7 @@ extension MovieDataSource: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.identifier, for: indexPath) as? MovieTableViewCell else { fatalError("failed to load MovieTableViewCell")}
         
-        if indexPath.row == movies.count - 5 {
+        if indexPath.row >= movies.count - 5 && movieDataBase.isLoadingNextPage {
             movieDataBase.nextPage()
         }
 
