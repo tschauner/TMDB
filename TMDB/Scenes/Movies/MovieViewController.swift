@@ -135,6 +135,7 @@ extension MovieViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+        searchBar.text = nil
         isSearching = false
         tableView.reloadData()
     }
@@ -171,5 +172,14 @@ extension MovieViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movie = isSearching ? movieDataBase.filteredMovies[indexPath.row] : movieDataBase.movies[indexPath.row]
         showDetailController(forMovie: movie)
+    }
+    
+    @available(iOS 13.0, *)
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let movie = isSearching ? movieDataBase.filteredMovies[indexPath.row] : movieDataBase.movies[indexPath.row]
+        return UIContextMenuConfiguration(identifier:  "\(indexPath.row)" as NSCopying, previewProvider: { () -> UIViewController? in
+            return MovieDetailViewController(withMovie: movie)
+        }, actionProvider: nil)
     }
 }
