@@ -15,13 +15,11 @@ class MovieViewController: UIViewController {
     private let movieDataBase = MovieDataBase.shared
     private let statusBarView = UIView()
     private let refreshControl = UIRefreshControl()
+    private let searchBarPlaceholderText = "Search for movies"
     
     private var isSearching: Bool = false {
         didSet {
-            movieDataBase.isSearching = isSearching
-            tableView.refreshControl = isSearching ? nil : refreshControl
-            tableView.contentInsetAdjustmentBehavior = isSearching ? .always : .never
-            statusBarView.isHidden = isSearching ? false : true
+            adjustViewsForSearch()
         }
     }
     
@@ -67,17 +65,16 @@ class MovieViewController: UIViewController {
         
         searchBar.searchBarStyle = .minimal
         searchBar.backgroundColor = .black
-        searchBar.placeholder = "Search for movies"
+        searchBar.placeholder = searchBarPlaceholderText
         searchBar.delegate = self
         searchBar.showsCancelButton = true
+        searchBar.isHidden = true
         
         refreshControl.tintColor = .lightGray
         refreshControl.bounds = CGRect(x: refreshControl.bounds.origin.x, y: -30, width: refreshControl.bounds.size.width, height: refreshControl.bounds.size.height)
         tableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(fetchMovies), for: .valueChanged)
         
-        MovieDataBase.shared.fetchGenres()
-        MovieDataBase.shared.fetchMovies()
         setupNavigationBar()
         
         NotificationCenter.default.addObserver(self, selector: #selector(moviesDidChange), name: Notifications.moviesDidChange.name, object: nil)
@@ -85,10 +82,21 @@ class MovieViewController: UIViewController {
     
     private func setupNavigationBar() {
         let searchButton = UIBarButtonItem(image: #imageLiteral(resourceName: "magnifier"), landscapeImagePhone: nil, style: .done, target: self, action: #selector(searchButtonTapped))
+        navigationItem.titleView = searchBar
         navigationItem.rightBarButtonItem = searchButton
     }
     
+    private func adjustViewsForSearch() {
+        movieDataBase.isSearching = isSearching
+        searchBar.placeholder = isSearching ? searchBarPlaceholderText : nil
+        searchBar.isHidden = isSearching ? false : true
+        tableView.refreshControl = isSearching ? nil : refreshControl
+        tableView.contentInsetAdjustmentBehavior = isSearching ? .always : .never
+        statusBarView.isHidden = isSearching ? false : true
+    }
+    
     @objc private func fetchMovies() {
+        movieDataBase.isLoadingNextPage = false
         refreshControl.beginRefreshing()
         movieDataBase.fetchMovies {
             DispatchQueue.main.async {
@@ -99,7 +107,6 @@ class MovieViewController: UIViewController {
     }
     
     @objc private func searchButtonTapped() {
-        navigationItem.titleView = searchBar
         searchBar.becomeFirstResponder()
         isSearching = true
         tableView.reloadData()
@@ -129,9 +136,7 @@ extension MovieViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchBar.text = nil
         isSearching = false
-        navigationItem.titleView = nil
         tableView.reloadData()
     }
 }
