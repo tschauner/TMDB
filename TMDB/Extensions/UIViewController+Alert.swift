@@ -19,9 +19,4 @@ extension UIViewController {
             self.present(alertController, animated: true, completion: completion)
         }
     }
-    
-    func showDefaultAlert() {
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        showAlert(withStyle: .alert, title: nil, message: "Something went wrong. Check your internet connection", actions: okAction, completion: nil)
-    }
 }

@@ -21,9 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         applyAppeareance()
         
-        MovieDataBase.shared.fetchGenres()
-        MovieDataBase.shared.fetchMovies()
-        
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         
@@ -40,11 +37,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
-
-extension UIApplication {
-    
-    var appDelegate: AppDelegate {
-        return delegate as! AppDelegate
-    }
-}
-
