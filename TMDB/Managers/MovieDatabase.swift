@@ -20,7 +20,7 @@ class MovieDataBase {
     
     var featuredMovie: Movie?
     
-    var movies: [Movie] = [] {
+    private(set) var movies: [Movie] = [] {
         didSet {
             if currentPage == 1, let firstMovie = movies.first {
                 featuredMovie = firstMovie
@@ -30,9 +30,16 @@ class MovieDataBase {
         }
     }
     
-    var filteredMovies: [Movie] = []
+    private(set) var filteredMovies: [Movie] = [] {
+        didSet {
+            if filteredMovies != oldValue {
+                NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
+            }
+        }
+    }
+    
     var genres: [Genre] = []
-
+    
     var isSearching: Bool = false {
         didSet {
             if !isSearching {
@@ -49,21 +56,18 @@ class MovieDataBase {
     /// fetch nowplaying movies
     /// - Parameter page: default is 1. if the user  takes refresh control default page will be used
     /// - Parameter completion: optional completion block. will be used when user takes refresh control
-    func fetchMovies(forPage page: Int = 1, completion: (() -> Void)? = nil) {
-        APIService.shared.request(endpoint: .nowPlaying(page: page)) { (response: Result<MovieResult, APIError>) in
+    func fetchMovies(forPage page: Int = 1) {
+        APIService.shared.request(endpoint: .nowPlaying(page: page)) { [weak self] (response: Result<MovieResult, APIError>) in
             switch response {
             case .success(let movieResult):
-                self.currentPage = page
+                self?.currentPage = page
                 page == 1
-                    ? self.movies = movieResult.results
-                    : self.movies.append(contentsOf: movieResult.results)
-                
-                completion?()
+                    ? self?.movies = movieResult.results
+                    : self?.movies.append(contentsOf: movieResult.results)
             case .failure:
-                completion?()
                 DispatchQueue.main.async {
-                     // appdelegate must be called on mainthread
-                     UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                    // appdelegate must be called on mainthread
+                    UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
                 }
             }
         }
@@ -71,14 +75,13 @@ class MovieDataBase {
     
     /// fetch movies with searchString
     func searchMovies(searchString: String) {
-        APIService.shared.request(endpoint: .search(searchString)) { (response: Result<MovieResult, APIError>) in
+        APIService.shared.request(endpoint: .search(searchString)) { [weak self] (response: Result<MovieResult, APIError>) in
             switch response {
             case .success(let movieResult):
-                self.filteredMovies = movieResult.results
-                NotificationCenter.default.post(name: Notifications.moviesDidChange.name, object: nil)
+                self?.filteredMovies = movieResult.results
             case .failure:
                 DispatchQueue.main.async {
-                     UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                    UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
                 }
             }
         }
@@ -86,14 +89,14 @@ class MovieDataBase {
     
     /// fetch all genres
     func fetchGenres() {
-        APIService.shared.request(endpoint: .genres) { (response: Result<
+        APIService.shared.request(endpoint: .genres) { [weak self] (response: Result<
             GenreResult, APIError>) in
             switch response {
             case .success(let genresResult):
-                self.genres = genresResult.genres
+                self?.genres = genresResult.genres
             case .failure:
                 DispatchQueue.main.async {
-                     UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
+                    UIApplication.shared.appDelegate.navigationController.showDefaultAlert()
                 }
             }
         }

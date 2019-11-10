@@ -31,17 +31,6 @@ class MovieViewController: UIViewController {
         }
     }
     
-    private let verticalGradientView: VerticalGradientView = {
-        let gradientView = VerticalGradientView()
-        gradientView.startPosition = 0.5
-        gradientView.endPosition = 1
-        gradientView.startColor = UIColor.black.withAlphaComponent(0.2)
-        gradientView.endColor = .black
-        gradientView.backgroundColor = .clear
-        gradientView.translatesAutoresizingMaskIntoConstraints = false
-        return gradientView
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,6 +66,9 @@ class MovieViewController: UIViewController {
         
         setupNavigationBar()
         
+        MovieDataBase.shared.fetchGenres()
+        MovieDataBase.shared.fetchMovies()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(moviesDidChange), name: Notifications.moviesDidChange.name, object: nil)
     }
     
@@ -97,12 +89,7 @@ class MovieViewController: UIViewController {
     
     @objc private func fetchMovies() {
         refreshControl.beginRefreshing()
-        movieDataBase.fetchMovies {
-            DispatchQueue.main.async {
-                self.refreshControl.endRefreshing()
-                self.tableView.reloadData()
-            }
-        }
+        movieDataBase.fetchMovies()
     }
     
     @objc private func searchButtonTapped() {
@@ -116,6 +103,9 @@ class MovieViewController: UIViewController {
     }
     
     @objc private func moviesDidChange() {
+        if refreshControl.isRefreshing {
+            refreshControl.endRefreshing()
+        }
         tableView.reloadData()
     }
     
