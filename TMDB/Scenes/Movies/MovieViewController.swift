@@ -49,7 +49,6 @@ class MovieViewController: UIViewController {
         view.addSubview(tableView)
         tableView.frame = view.bounds
         
-        movieDataBase.delegate = self
         movieDataSource = MovieDataSource()
         tableView.dataSource = movieDataSource
         tableView.delegate = self
@@ -77,7 +76,8 @@ class MovieViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(fetchMovies), for: .valueChanged)
         
         setupNavigationBar()
-        fetchMovieData()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(moviesDidChange), name: Notifications.moviesDidChange.name, object: nil)
     }
     
     private func setupNavigationBar() {
@@ -97,7 +97,12 @@ class MovieViewController: UIViewController {
     
     @objc private func fetchMovies() {
         refreshControl.beginRefreshing()
-        movieDataBase.fetchMovies()
+        movieDataBase.fetchMovies {
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+                self.tableView.reloadData()
+            }
+        }
     }
     
     @objc private func searchButtonTapped() {
@@ -106,13 +111,12 @@ class MovieViewController: UIViewController {
         tableView.reloadData()
     }
     
-    private func fetchMovieData() {
-        MovieDataBase.shared.fetchGenres()
-        MovieDataBase.shared.fetchMovies()
-    }
-    
     private func search(movies: String) {
         movieDataBase.searchMovies(searchString: movies)
+    }
+    
+    @objc private func moviesDidChange() {
+        tableView.reloadData()
     }
     
     private func showDetailController(forMovie movie: Movie) {
@@ -168,20 +172,5 @@ extension MovieViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movie = isSearching ? movieDataBase.filteredMovies[indexPath.row] : movieDataBase.movies[indexPath.row]
         showDetailController(forMovie: movie)
-    }
-}
-
-extension MovieViewController: MovieProtocol {
-    
-    func moviesUpdated() {
-        if refreshControl.isRefreshing {
-            refreshControl.endRefreshing()
-        }
-        tableView.reloadData()
-    }
-    
-    func showErrorAlert(withTitle title: String) {
-        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-        showAlert(withStyle: .alert, title: title, message: nil, actions: okAction, completion: nil)
     }
 }
